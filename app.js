@@ -1,4 +1,6 @@
 const Sequelize = require('sequelize');
+const op = Sequelize.Op;
+
 const connection = new Sequelize("demo_schema", "root", "123456789", {
     //Host para entrar no banco de dados
     host: 'localhost',
@@ -37,7 +39,6 @@ const Article = connection.define("article",
         id_autor: {
             type: Sequelize.INTEGER,
             allowNull: false,
-            unique: true,
             primaryKey: true
         },
         titulo: {
@@ -143,7 +144,7 @@ connection.sync({
         return Promise.all([
             Article.create(req.body, {
                 // Passa os valores de fields que você deseja inserir
-                fields: ['titulo', 'corpo','id_autor']
+                fields: ['titulo', 'corpo', 'id_autor']
             }),
             // Criação em massa de registros, Passa um Json com o formato de dados e ele cria o insert, 
             // com values com varios itens
@@ -152,12 +153,12 @@ connection.sync({
                     {
                         titulo: 'Teste realizado para criação de registros em massa',
                         corpo: 'Teste para Criação de registro em massa, para verificar disponibilidade da função',
-                        id_autor: 1 
+                        id_autor: id_autor
                     },
                     {
                         titulo: 'Teste 2 realizado para criação de registros em massa',
                         corpo: 'Teste 2 para Criação de registro em massa, para verificar disponibilidade da função',
-                        id_autor: 1
+                        id_autor: id_autor
                     }
                 ], {
                     //Bulkcreate por padrão não usa validação, para que faça a validação deve usar
@@ -169,20 +170,24 @@ connection.sync({
         ]).then(results => {
             Article.findAll(
                 //Include é usado para buscar os dados relacionados as tabelas
-                {include: Autor}
+                {
+                    include: Autor,
+                    where: {
+                        id: {
+                            [op.not]: 2
+                        }
+                    }
+                }
             ).then(function (articles) {
                 articles.forEach(article => {
                     article.dataValues.autor = article.dataValues.autor.dataValues;
-                    console.log('Artigossss s',article.get());
+                    console.log('------------------------------------------------------------');
+                    console.log('Artigosssss', article.dataValues);
+                    console.log('------------------------------------------------------------');
                 });
             });
         })
     })
-
-
-
-
-
 
 }).catch(function (error) {
     console.log(error);
