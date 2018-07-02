@@ -1,0 +1,22 @@
+{
+  "name": "sequelize-basic",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "mysql2": "^1.5.3",
+    "sequelize": "^4.38.0",
+    "sequelize-cli": "^4.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Sequelize",
+    "Mysql - Sequelize",
+    "Mysql"
+  ],
+  "author": "Ítalo Andrade Oliveira",
+  "license": "ISC"
+}
